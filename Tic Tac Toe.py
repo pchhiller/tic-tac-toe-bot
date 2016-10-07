@@ -1,14 +1,23 @@
+from __future__ import print_function
+from sys import stdout
 import random
 import time
 global board
 board=['z',' ',' ',' ',' ',' ',' ',' ',' ',' ']
 global unit
 global comp_unit
-unit= random.choice('X 0'.split())
+unit=str(input("Choose Your Symbol( 1 or 0 ) : "))
+if unit == '1':
+	comp_unit = '0'
+else:
+	comp_unit = '1'
+
+print("Places are corresponding to your KeyPad")
+"""unit= random.choice('X 0'.split())
 if unit =='X':
     comp_unit='0'
 else:
-    comp_unit= 'X'
+    comp_unit= 'X'"""
 def board_print():
     
     bo= '''
@@ -20,6 +29,8 @@ def board_print():
  ---------''' %(board[7],board[8],board[9],board[4],board[5],board[6],board[1],board[2],board[3])
     
     print(bo)
+
+
 def victory(var):
     bo= board
     end= False
@@ -29,7 +40,6 @@ def victory(var):
         end=True
     elif (bo[7]==var and bo[8]==var and bo[9]==var):
         end=True
-
     elif (bo[1]==var and bo[4]==var and bo[7]==var):
         end=True
     elif (bo[2]==var and bo[5]==var and bo[8]==var):
@@ -42,17 +52,10 @@ def victory(var):
         end=True
     return end
     
-    
-    
 
 def enter(a,pos):
-    if board[pos]==' ':
-        
-        board[pos]=a
-        board_print()
-        
-    else:
-        print('This place already has a value')
+    board[pos]=a
+    board_print()
 
 def comp_enter():
     cvic=0
@@ -86,9 +89,14 @@ def comp_enter():
                 while board[ran1]!=' ':
                     ran1= int(random.sample([2,4,5,8],1)[0])
                 board[ran1]=comp_unit
-        
+
+
+
 while ' ' in board:
-    pos= int(input('Enter where to place your %s '%(unit)))
+    pos= int(input('Enter where to place your %s : '%(unit)))
+    while board[pos]!=' ':
+    	print('This place already has a value')
+    	pos= int(input('Enter where to place your %s : '%(unit)))
     enter(unit,pos)
     end=victory(unit)
     if end==True:
@@ -97,11 +105,17 @@ while ' ' in board:
     if ' ' in board:
         comp_enter()
         print("Computer's move.....")
-        time.sleep(3)
+        t=3
+        while t>0:
+        	stdout.write("\r%d" % t)
+        	stdout.flush()
+        	time.sleep(1)
+        	t-=1
+        print('\n')
         board_print()
-        end=victory(comp_unit)
-        if end== True:
+        if victory(comp_unit):
             print("Computer wins")
             break
+
 else:
     print('Game Over , Its a draw')
